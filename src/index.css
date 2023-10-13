@@ -12,3 +12,6 @@
     flex-flow: column;
     gap: 12px;
 }
+.todolist{
+    text-align: left;
+}
