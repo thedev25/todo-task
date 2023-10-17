@@ -1,87 +1,127 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const TodoList = () => {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState("");
   const [todos, setTodos] = useState({
-    today: [],
-    tomorrow: [],
-    then: []
+    bugun: [],
+    ertaga: [],
+    keyin: [],
   });
 
   const handleChange = (e) => {
     setValue(e.target.value);
-  }
+  };
 
   const handleAdd = () => {
     if (value.trim().length == "") {
-      alert('input value is empty');
-    } 
-    else if (/\btoday\b/i.test(value)) {
+      alert("input value is empty");
+    } else if (/\bugun\b/i.test(value)) {
       setTodos((prevTodos) => ({
         ...prevTodos,
-        today: [...prevTodos.today, value],
+        bugun: [...prevTodos.bugun, { text: value, completed: false }],
       }));
     }
-
-    else if (/\btomorrow\b/i.test(value)) {
+    if (/\ertaga\b/i.test(value)) {
       setTodos((prevTodos) => ({
         ...prevTodos,
-        tomorrow: [...prevTodos.tomorrow, value],
+        ertaga: [...prevTodos.ertaga, { text: value, completed: false }],
       }));
-    }
-
-   else if (/\bthen\b/i.test(value)) {
+    } else if (/\keyin\b/i.test(value)) {
       setTodos((prevTodos) => ({
         ...prevTodos,
-        then: [...prevTodos.then, value],
+        keyin: [...prevTodos.keyin, { text: value, completed: false }],
       }));
-    }
-
-    else {
+    } else {
       setTodos((prevTodos) => ({
         ...prevTodos,
-        today: [...prevTodos.today, value],
+        bugun: [...prevTodos.bugun, { text: value, completed: false }],
       }));
     }
     setValue("");
-  }
+  };
+
+  const toggleTodo = (category, index) => {
+    setTodos((prevTodos) => {
+      const updatedTodos = [...prevTodos[category]];
+      updatedTodos[index].completed = !updatedTodos[index].completed;
+      return {
+        ...prevTodos,
+        [category]: updatedTodos,
+      };
+    });
+  };
 
   return (
     <div>
-    <div  className='container' >
+      <div className="container">
         <div className="todolist">
-        <div>
-      <input
-        type="text"
-        value={value}
-        onChange={handleChange}
-      />
-      <button onClick={handleAdd}>Add</button>
-      </div>
-      <div>
-        <h3>Today:</h3>
-        <ul>
-          {todos.today.map((item, index) => (
-            <li key={index}>{item}</li>
-          ))}
-        </ul>
-      </div>
-      <div>
-        <h3>Tomorrow:</h3>
-        <ul>
-          {todos.tomorrow.map((item, index) => (
-            <li key={index}>{item}</li>
-          ))}
-        </ul>
-      </div>
-      <div>
-        <h3>Then:</h3>
-        <ul>
-          {todos.then.map((item, index) => (
-            <li key={index}>{item}</li>
-          ))}
-        </ul>
-      </div>
+          <div>
+            <input type="text" value={value} onChange={handleChange} />
+            <button onClick={handleAdd}>Add</button>
+          </div>
+          <div>
+            <h3>Bugun:</h3>
+            <ol>
+              {todos.bugun.map((todo, index) => (
+                <li key={index}>
+                  <input
+                    type="checkbox"
+                    checked={todo.completed}
+                    onChange={() => toggleTodo("bugun", index)}
+                  />
+                  <span
+                    style={{
+                      textDecoration: todo.completed ? "line-through" : "none",
+                    }}
+                  >
+                    {todo.text}
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </div>
+          <div>
+            <h3>Ertaga:</h3>
+            <ol>
+              {todos.ertaga.map((todo, index) => (
+                <li key={index}>
+                  <input
+                    type="checkbox"
+                    checked={todo.completed}
+                    onChange={() => toggleTodo("ertaga", index)}
+                  />
+                  <span
+                    style={{
+                      textDecoration: todo.completed ? "line-through" : "none",
+                    }}
+                  >
+                    {todo.text}
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </div>
+          <div>
+            <h3>Keyin:</h3>
+            <ul>
+              {todos.keyin.map((todo, index) => (
+                <li key={index}>
+                  <input
+                    type="checkbox"
+                    checked={todo.completed}
+                    onChange={() => toggleTodo("keyin", index)}
+                  />
+                  <span
+                    style={{
+                      textDecoration: todo.completed ? "line-through" : "none",
+                    }}
+                  >
+                    {todo.text}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </div>
